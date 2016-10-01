@@ -1,6 +1,0 @@
-C:\Users\David\Source\Repos\gefore-auto-update\GeforceAutoUpdate\bin\Debug\GeforceAutoUpdate.exe.config
-C:\Users\David\Source\Repos\gefore-auto-update\GeforceAutoUpdate\bin\Debug\GeforceAutoUpdate.exe
-C:\Users\David\Source\Repos\gefore-auto-update\GeforceAutoUpdate\bin\Debug\GeforceAutoUpdate.pdb
-C:\Users\David\Source\Repos\gefore-auto-update\GeforceAutoUpdate\obj\Debug\GeforceAutoUpdate.csprojResolveAssemblyReference.cache
-C:\Users\David\Source\Repos\gefore-auto-update\GeforceAutoUpdate\obj\Debug\GeforceAutoUpdate.exe
-C:\Users\David\Source\Repos\gefore-auto-update\GeforceAutoUpdate\obj\Debug\GeforceAutoUpdate.pdb
