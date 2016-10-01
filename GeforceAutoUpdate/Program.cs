@@ -10,6 +10,11 @@ namespace GeforceAutoUpdate
 	{
 		static void Main(string[] args)
 		{
+			if (GameReadyDriver.UpdateNeeded)
+			{
+				// promt for manual / automatic update
+				// 
+			}
 		}
 	}
 }
