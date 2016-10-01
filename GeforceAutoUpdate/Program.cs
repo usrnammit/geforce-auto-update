@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeforceAutoUpdate
 {
@@ -12,8 +8,13 @@ namespace GeforceAutoUpdate
 		{
 			if (GameReadyDriver.UpdateNeeded)
 			{
-				// promt for manual / automatic update
-				// 
+				// TODO: promt for manual / automatic update
+				// retrieve OS information (OsInfo library)
+				// add method to GameRadydriver.cs for getting update link
+			}
+			else
+			{
+				Console.WriteLine("GeForce Game Ready driver is up-to-date.");
 			}
 		}
 	}

@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Win32;
+using System.Globalization;
 
 namespace GeforceAutoUpdate
 {
 	static class GameReadyDriver
 	{
-		private static float localVersion;
-		private static float latestVersion;
+		public static double localVersion;
+		private static double latestVersion;
 		public static readonly bool UpdateNeeded; // TODO: rewrite as property
 
 		static GameReadyDriver()
 		{
-			localVersion = GetLocalVersion();
-			latestVersion = GetLatestVersion();
+			localVersion = RetrieveLocalVersion();
+			latestVersion = RetrieveLatestVersion();
 
 			if (latestVersion > localVersion)
 			{
@@ -27,16 +25,29 @@ namespace GeforceAutoUpdate
 			}
 		}
 
-		private static float GetLocalVersion()
+		private static double RetrieveLocalVersion()
 		{
-			// TODO: logic for retrieving local driver version
-			float version = 0.0f;
+			RegistryKey localKey = null;
+			if (Environment.Is64BitOperatingSystem)
+			{
+				localKey = RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.LocalMachine, RegistryView.Registry64);
+			}
+			else
+			{
+				localKey = RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.LocalMachine, RegistryView.Registry32);
+			}
+
+			localKey = localKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}_Display.Driver");
+			string s = localKey.GetValue("DisplayVersion").ToString();
+
+			double version = Double.Parse(s, CultureInfo.InvariantCulture);
 			return version;
 		}
-		private static float GetLatestVersion()
+
+		private static double RetrieveLatestVersion()
 		{
 			// TODO: logic for retrieving latest version
-			float version = 0.0f;
+			double version = 0.0f;
 			return version;
 		}
 	}
