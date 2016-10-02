@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Win32;
 using System.Globalization;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace GeforceAutoUpdate
 {
@@ -45,8 +47,14 @@ namespace GeforceAutoUpdate
 
 		private static string RetrieveLatestVersion()
 		{
-			// TODO: logic for retrieving latest version
-			string version = "372.90";
+			WebClient client = new WebClient();
+			string chocoPackagePage = client.DownloadString("https://chocolatey.org/packages/geforce-game-ready-driver-win10");
+
+			string pattern = @"Geforce Game Ready Driver for Windows 10 \d\d\d.\d\d";
+			Regex r = new Regex(pattern);
+			Match m = r.Match(chocoPackagePage);
+
+			string version = m.Value.Substring(41);
 			return version;
 		}
 
