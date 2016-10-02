@@ -25,7 +25,17 @@ namespace GeforceAutoUpdate
 
 		private void AutomaticButtonClicked(object sender, EventArgs e)
 		{
-			// TODO: automatic button behaivior
+			this.Hide();
+			bool succes = GameReadyDriver.AutoUpdate();
+			if (succes)
+			{
+				this.Close();
+			}
+			else
+			{
+				this.Show();
+				// TODO: add notification about failure, disable Automatic button
+			}
 		}
 
 		private void ManualButtonClicked(object sender, EventArgs e)

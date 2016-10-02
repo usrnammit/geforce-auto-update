@@ -38,7 +38,6 @@
 			// Automatic
 			// 
 			this.Automatic.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
-			this.Automatic.Enabled = false;
 			this.Automatic.Location = new System.Drawing.Point(12, 343);
 			this.Automatic.Name = "Automatic";
 			this.Automatic.Size = new System.Drawing.Size(91, 38);

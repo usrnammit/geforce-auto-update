@@ -3,6 +3,8 @@ using Microsoft.Win32;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
+using System.IO;
 
 namespace GeforceAutoUpdate
 {
@@ -104,6 +106,21 @@ namespace GeforceAutoUpdate
 									"Automatic: Downloads the update and performs silent install in the background.\nNot implemented yet\n\n" +
 									"Manual: Opens direct link to the .exe in your default browser.\nPlease check that OS version and CPU architecture matches.\n\n";
 			return updateDetails;
+		}
+
+		public static bool AutoUpdate()
+		{
+			DownloadAndInstall installer = new DownloadAndInstall();
+			installer.Show();
+
+			Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\GeforceAutoUpdate\\");
+			string location = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\GeforceAutoUpdate\\";
+
+			WebClient client = new WebClient();
+			client.DownloadProgressChanged += installer.DownloadProgressChanged;
+			client.DownloadFileAsync(new Uri(GetDownloadLink()), location);
+
+			return false;
 		}
 	}
 }
