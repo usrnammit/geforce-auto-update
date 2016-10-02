@@ -6,11 +6,13 @@ namespace GeforceAutoUpdate
 	{
 		static void Main(string[] args)
 		{
+			Console.WriteLine("Installed version: " + GameReadyDriver.LocalVersion);
+			Console.WriteLine("Latest version: " + GameReadyDriver.LatestVersion);
+			Console.WriteLine("\n");
+
 			if (GameReadyDriver.UpdateNeeded)
 			{
-				// TODO: promt for manual / automatic update
-				// retrieve OS information (OsInfo library)
-				// add method to GameRadydriver.cs for getting update link
+				Console.WriteLine("Update {0} for GeForce Game Ready Driver is avaible.", GameReadyDriver.LatestVersion);
 			}
 			else
 			{
