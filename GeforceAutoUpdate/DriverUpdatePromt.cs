@@ -20,7 +20,7 @@ namespace GeforceAutoUpdate
 
 		private void DriverUpdatePromt_Load(object sender, EventArgs e)
 		{
-			
+			UpdateInfo.Text = GameReadyDriver.GetUpdateDetails();
 		}
 
 		private void AutomaticButtonClicked(object sender, EventArgs e)

@@ -28,41 +28,38 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DriverUpdatePromt));
 			this.Automatic = new System.Windows.Forms.Button();
 			this.Manual = new System.Windows.Forms.Button();
 			this.Cancel = new System.Windows.Forms.Button();
-			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.UpdateInfo = new System.Windows.Forms.RichTextBox();
 			this.SuspendLayout();
 			// 
 			// Automatic
 			// 
 			this.Automatic.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
-			this.Automatic.Location = new System.Drawing.Point(26, 140);
+			this.Automatic.Enabled = false;
+			this.Automatic.Location = new System.Drawing.Point(12, 343);
 			this.Automatic.Name = "Automatic";
 			this.Automatic.Size = new System.Drawing.Size(91, 38);
 			this.Automatic.TabIndex = 0;
 			this.Automatic.Text = "Automatic";
-			this.toolTip1.SetToolTip(this.Automatic, "tooltip automatic");
 			this.Automatic.UseVisualStyleBackColor = true;
 			this.Automatic.Click += new System.EventHandler(this.AutomaticButtonClicked);
 			// 
 			// Manual
 			// 
-			this.Manual.Location = new System.Drawing.Point(158, 140);
+			this.Manual.Location = new System.Drawing.Point(163, 343);
 			this.Manual.Name = "Manual";
 			this.Manual.Size = new System.Drawing.Size(91, 38);
 			this.Manual.TabIndex = 1;
 			this.Manual.Text = "Manual";
-			this.toolTip1.SetToolTip(this.Manual, "manual tooltip");
 			this.Manual.UseVisualStyleBackColor = true;
 			this.Manual.Click += new System.EventHandler(this.ManualButtonClicked);
 			// 
 			// Cancel
 			// 
-			this.Cancel.Location = new System.Drawing.Point(300, 140);
+			this.Cancel.Location = new System.Drawing.Point(316, 346);
 			this.Cancel.Name = "Cancel";
 			this.Cancel.Size = new System.Drawing.Size(91, 38);
 			this.Cancel.TabIndex = 2;
@@ -73,14 +70,12 @@
 			// UpdateInfo
 			// 
 			this.UpdateInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.UpdateInfo.Location = new System.Drawing.Point(26, 12);
+			this.UpdateInfo.Location = new System.Drawing.Point(12, 12);
 			this.UpdateInfo.Name = "UpdateInfo";
 			this.UpdateInfo.ReadOnly = true;
-			this.UpdateInfo.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-			this.UpdateInfo.Size = new System.Drawing.Size(365, 101);
+			this.UpdateInfo.Size = new System.Drawing.Size(395, 325);
 			this.UpdateInfo.TabIndex = 3;
-			this.UpdateInfo.Text = "New version of GeForce Game Ready Drive is aviable.\n\nInstalled version: 100.00\nLa" +
-    "test version: 372.90\n";
+			this.UpdateInfo.Text = "";
 			// 
 			// DriverUpdatePromt
 			// 
@@ -88,7 +83,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
-			this.ClientSize = new System.Drawing.Size(419, 204);
+			this.ClientSize = new System.Drawing.Size(419, 396);
 			this.Controls.Add(this.UpdateInfo);
 			this.Controls.Add(this.Cancel);
 			this.Controls.Add(this.Manual);
@@ -105,7 +100,6 @@
 		#endregion
 
 		private System.Windows.Forms.Button Automatic;
-		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.Button Manual;
 		private System.Windows.Forms.Button Cancel;
 		private System.Windows.Forms.RichTextBox UpdateInfo;

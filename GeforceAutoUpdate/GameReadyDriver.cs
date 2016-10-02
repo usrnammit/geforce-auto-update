@@ -98,9 +98,11 @@ namespace GeforceAutoUpdate
 
 		public static string GetUpdateDetails() // TODO: add changelog, link to nvidia site, license, disclaimer, ...
 		{
-			string updateDetails =	"New version of GeForce Game Ready Drive is aviable.\n\n" +
+			string updateDetails = "New version of GeForce Game Ready Drive is aviable.\n\n" +
 									"Installed version: " + GameReadyDriver.LocalVersion + "\n" +
-									"Latest version: " + GameReadyDriver.LatestVersion + "\n";
+									"Latest version: " + GameReadyDriver.LatestVersion + "\n\n\n" +
+									"Automatic: Downloads the update and performs silent install in the background.\nNot implemented yet\n\n" +
+									"Manual: Opens direct link to the .exe in your default browser.\nPlease check that OS version and CPU architecture matches.\n\n";
 			return updateDetails;
 		}
 	}
