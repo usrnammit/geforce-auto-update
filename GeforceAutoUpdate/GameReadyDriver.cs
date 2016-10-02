@@ -60,12 +60,12 @@ namespace GeforceAutoUpdate
 
 				if (windowsVersion.StartsWith("Windows 10"))
 				{
-					string downloadLink = "http://us.download.nvidia.com/Windows/" + LocalVersion + "/" + LocalVersion + "-desktop-win10-64bit-international-whql.exe";
+					string downloadLink = "http://us.download.nvidia.com/Windows/" + LatestVersion + "/" + LatestVersion + "-desktop-win10-64bit-international-whql.exe";
 					return downloadLink;
 				}
 				else
 				{
-					string downloadLink = "http://us.download.nvidia.com/Windows/" + LocalVersion + "/" + LocalVersion + "-desktop-win8-win7-64bit-international-whql.exe";
+					string downloadLink = "http://us.download.nvidia.com/Windows/" + LatestVersion + "/" + LatestVersion + "-desktop-win8-win7-64bit-international-whql.exe";
 					return downloadLink;
 				}
 			}

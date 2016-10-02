@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace GeforceAutoUpdate
 {
@@ -12,7 +13,12 @@ namespace GeforceAutoUpdate
 
 			if (GameReadyDriver.UpdateNeeded)
 			{
-				Console.WriteLine("Update {0} for GeForce Game Ready Driver is avaible.", GameReadyDriver.LatestVersion);
+				Console.WriteLine("Update {0} for GeForce Game Ready Driver is avaible. Would you like to download it? (y/n)", GameReadyDriver.LatestVersion);
+				string s = Console.ReadLine();
+				if (s == "y")
+				{
+					Process.Start(GameReadyDriver.GetDownloadLink());
+				}
 			}
 			else
 			{
