@@ -39,7 +39,7 @@ namespace GeforceAutoUpdate
 
 			localKey = localKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}_Display.Driver");
 			string version = localKey.GetValue("DisplayVersion").ToString();
-			version = "100.00"; // TODO: remove this
+			version = "100.00"; // TODO: remove this (wrong local version for testing purposes)
 			return version;
 		}
 
@@ -86,6 +86,14 @@ namespace GeforceAutoUpdate
 					return downloadLink;
 				}
 			}
+		}
+
+		public static string GetUpdateDetails() // TODO: add changelog, link to nvidia site, license, disclaimer, ...
+		{
+			string updateDetails =	"New version of GeForce Game Ready Drive is aviable.\n\n" +
+									"Installed version: " + GameReadyDriver.LocalVersion + "\n" +
+									"Latest version: " + GameReadyDriver.LatestVersion + "\n";
+			return updateDetails;
 		}
 	}
 }
