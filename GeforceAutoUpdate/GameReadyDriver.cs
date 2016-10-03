@@ -108,18 +108,8 @@ namespace GeforceAutoUpdate
 			return updateDetails;
 		}
 
-		public static bool AutoUpdate()
+		public static bool PerformUpdate()
 		{
-			DownloadAndInstall installer = new DownloadAndInstall();
-			installer.Show();
-
-			Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\GeforceAutoUpdate\\");
-			string location = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\GeforceAutoUpdate\\";
-
-			WebClient client = new WebClient();
-			client.DownloadProgressChanged += installer.DownloadProgressChanged;
-			client.DownloadFileAsync(new Uri(GetDownloadLink()), location);
-
 			return false;
 		}
 	}
