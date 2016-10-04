@@ -3,15 +3,14 @@ using Microsoft.Win32;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.ComponentModel;
-using System.IO;
 
 namespace GeforceAutoUpdate
 {
-	static class GameReadyDriver
+	static partial class GameReadyDriver
 	{
 		public static readonly string LocalVersion;
 		public static readonly string LatestVersion;
+		public static readonly bool isInstalled;
 		public static readonly bool UpdateNeeded;
 
 		static GameReadyDriver()
@@ -19,12 +18,19 @@ namespace GeforceAutoUpdate
 			LocalVersion = RetrieveLocalVersion();
 			LatestVersion = RetrieveLatestVersion();
 
-			if (Double.Parse(LatestVersion, CultureInfo.InvariantCulture) > Double.Parse(LocalVersion, CultureInfo.InvariantCulture))
+			if (LocalVersion == null)
 			{
+				isInstalled = false;
+				UpdateNeeded = false;
+			}
+			else if (Double.Parse(LatestVersion, CultureInfo.InvariantCulture) > Double.Parse(LocalVersion, CultureInfo.InvariantCulture))
+			{
+				isInstalled = true;
 				UpdateNeeded = true;
 			}
 			else
 			{
+				isInstalled = true;
 				UpdateNeeded = false;
 			}
 		}
@@ -42,9 +48,17 @@ namespace GeforceAutoUpdate
 			}
 
 			localKey = localKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}_Display.Driver");
-			string version = localKey.GetValue("DisplayVersion").ToString();
-			version = "100.00"; // TODO: remove this (wrong local version for testing purposes)
-			return version;
+
+			if (localKey != null)
+			{
+				string version = localKey.GetValue("DisplayVersion").ToString();
+				version = "100.00"; // TODO: remove this (wrong local version for testing purposes)
+				return version;
+			}
+			else
+			{
+				return "100.00"; // TODO: change this to null (for testing)
+			}
 		}
 
 		private static string RetrieveLatestVersion()
@@ -106,11 +120,6 @@ namespace GeforceAutoUpdate
 									"Automatic: Downloads the update and performs silent install in the background.\nNot implemented yet\n\n" +
 									"Manual: Opens direct link to the .exe in your default browser.\nPlease check that OS version and CPU architecture matches.\n\n";
 			return updateDetails;
-		}
-
-		public static bool PerformUpdate()
-		{
-			return false;
 		}
 	}
 }
