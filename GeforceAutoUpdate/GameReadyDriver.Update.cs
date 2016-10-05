@@ -13,8 +13,10 @@ namespace GeforceAutoUpdate
 		{
 			private WebClient client;
 			private ProgressBar progressBar;
+			private Process extract;
 			private string location;
 			private bool downloading;
+			private bool downloadOK;
 
 
 			public Update()
@@ -23,6 +25,7 @@ namespace GeforceAutoUpdate
 				location = Path.GetTempPath() + "GeForceAutoUpdate\\";
 				Directory.CreateDirectory(location);
 				downloading = false;
+				downloadOK = false;
 			}
 
 			public void Download()
@@ -37,7 +40,7 @@ namespace GeforceAutoUpdate
 				}
 			}
 
-			public void Download(ProgressBar progressBar)
+			public bool Download(ProgressBar progressBar)
 			{
 				downloading = true;
 				this.progressBar = progressBar;
@@ -49,11 +52,20 @@ namespace GeforceAutoUpdate
 				{
 					Application.DoEvents();
 				}
+
+				if (downloadOK)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
 			}
 
 			public bool Extract()
 			{
-				Process extract = new Process();
+				extract = new Process();
 				extract.StartInfo.FileName = location + "update.exe";
 				extract.StartInfo.Arguments = "-nr -y";
 				extract.Start();
@@ -98,15 +110,29 @@ namespace GeforceAutoUpdate
 
 			public void Abort()
 			{
-				client.CancelAsync();
-				client.Dispose();
+				if (client != null)
+				{
+					client.CancelAsync();
+					client.Dispose();
+				}
+				if (extract != null)
+				{
+					extract.Kill();
+					extract.Dispose();
+				}
 				CleanUp();
 			}
 
 			public void CleanUp()
 			{
-				Directory.Delete(location, true);
-				Directory.Delete("C:\\NVIDIA", true);
+				if (Directory.Exists(location))
+				{
+					Directory.Delete(location, true);
+				}
+				if (Directory.Exists("C:\\NVIDIAL"))
+				{
+					Directory.Delete("C:\\NVIDIA", true);
+				}
 			}
 
 			private void client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -117,6 +143,10 @@ namespace GeforceAutoUpdate
 
 			private void client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
 			{
+				if (e.Error == null)
+				{
+					downloadOK = true;
+				}
 				downloading = false;
 			}
 		}
