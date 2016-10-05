@@ -10,7 +10,7 @@ namespace GeforceAutoUpdate
 	{
 		public static readonly string LocalVersion;
 		public static readonly string LatestVersion;
-		public static readonly bool isInstalled;
+		public static readonly bool IsInstalled;
 		public static readonly bool UpdateNeeded;
 
 		private static string extractPath;
@@ -23,17 +23,17 @@ namespace GeforceAutoUpdate
 
 			if (LocalVersion == null)
 			{
-				isInstalled = false;
+				IsInstalled = false;
 				UpdateNeeded = false;
 			}
 			else if (Double.Parse(LatestVersion, CultureInfo.InvariantCulture) > Double.Parse(LocalVersion, CultureInfo.InvariantCulture))
 			{
-				isInstalled = true;
+				IsInstalled = true;
 				UpdateNeeded = true;
 			}
 			else
 			{
-				isInstalled = true;
+				IsInstalled = true;
 				UpdateNeeded = false;
 			}
 		}
@@ -63,7 +63,10 @@ namespace GeforceAutoUpdate
 				return "100.00"; // TODO: change this to null (for testing)
 			}
 		}
-
+		
+		// nVidia doesn't provide any reasonable way of checking current driver version beside GeForce Experience so we check latest version fo Chocolatey package.
+		// Chocolatey package page is fairly small and version is in headline making regex search fast enough.
+		// Note: The Chocolatey package page layout is supposed to get updated soon.
 		private static string RetrieveLatestVersion()
 		{
 			WebClient client = new WebClient();
@@ -77,6 +80,10 @@ namespace GeforceAutoUpdate
 			return version;
 		}
 
+		// Drivers come with 4 versions total with download link following the same pattern.
+		// The actual driver installer does it's own checks to verify propper version.
+		// extractPath is used by GameReadyDriver.Update.Unpack() - the dafault path cannot be easily changed
+		// however it follows similar pattern do the download url
 		public static string GetDownloadLink()
 		{
 			if (Environment.Is64BitOperatingSystem)
@@ -119,7 +126,9 @@ namespace GeforceAutoUpdate
 			}
 		}
 
-		public static string GetUpdateDetails() // TODO: add changelog, link to nvidia site, license, disclaimer, ...
+		// Displayed in the DriverUpdatePromt GUI
+		// TODO: add more information (changelog, link to official site, license,...)
+		public static string GetUpdateDetails()
 		{
 			string updateDetails = "New version of GeForce Game Ready Drive is aviable.\n\n" +
 									"Installed version: " + GameReadyDriver.LocalVersion + "\n" +

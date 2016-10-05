@@ -63,6 +63,9 @@ namespace GeforceAutoUpdate
 				}
 			}
 
+			// -nr prevents setup.exe from running immediately after extraction
+			// -y automates the process, adding -gm will result in fully silent extraction
+			// deletes any products besides actual video driver and core functionality
 			public bool Extract()
 			{
 				extract = new Process();
@@ -91,6 +94,8 @@ namespace GeforceAutoUpdate
 				}
 			}
 
+			// /n prevents PC from rebooting
+			// replacing /passive with /s will result in fully silent install
 			public bool Install()
 			{
 				Process install = new Process();

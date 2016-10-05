@@ -6,7 +6,7 @@ namespace GeforceAutoUpdate
 	{
 		static void Main(string[] args)
 		{
-			if (!GameReadyDriver.isInstalled)
+			if (!GameReadyDriver.IsInstalled)
 			{
 				MessageBox.Show("Unable to retrieve local version of Game Ready Driver.");
 			}
