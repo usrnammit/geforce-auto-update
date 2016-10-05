@@ -38,7 +38,7 @@ namespace GeforceAutoUpdate
 
 			update = new GameReadyDriver.Update();
 
-			UpdateInfo.Text += "======================\n\nDonwloading update...";
+			UpdateInfo.Text += "==================================\n\nDonwloading update...";
 			if (!update.Download(progressBar))
 			{
 				MessageBox.Show("Something went wrong with the download.");

@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Threading;
 
 namespace GeforceAutoUpdate
 {
@@ -36,7 +37,7 @@ namespace GeforceAutoUpdate
 
 				while (downloading)
 				{
-					Application.DoEvents();
+					Thread.Sleep(1000);
 				}
 			}
 
@@ -125,6 +126,7 @@ namespace GeforceAutoUpdate
 					extract.Kill();
 					extract.Dispose();
 				}
+				Thread.Sleep(3000);
 				CleanUp();
 			}
 

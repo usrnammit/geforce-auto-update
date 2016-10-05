@@ -55,12 +55,11 @@ namespace GeforceAutoUpdate
 			if (localKey != null)
 			{
 				string version = localKey.GetValue("DisplayVersion").ToString();
-				version = "100.00"; // TODO: remove this (wrong local version for testing purposes)
 				return version;
 			}
 			else
 			{
-				return "100.00"; // TODO: change this to null (for testing)
+				return null;
 			}
 		}
 		
@@ -80,7 +79,7 @@ namespace GeforceAutoUpdate
 			return version;
 		}
 
-		// Drivers come with 4 versions total with download link following the same pattern.
+		// Drivers come in 4 versions total with download link following the same pattern.
 		// The actual driver installer does it's own checks to verify propper version.
 		// extractPath is used by GameReadyDriver.Update.Unpack() - the dafault path cannot be easily changed
 		// however it follows similar pattern do the download url
@@ -131,8 +130,8 @@ namespace GeforceAutoUpdate
 		public static string GetUpdateDetails()
 		{
 			string updateDetails = "New version of GeForce Game Ready Drive is aviable.\n\n" +
-									"Installed version: " + GameReadyDriver.LocalVersion + "\n" +
-									"Latest version: " + GameReadyDriver.LatestVersion + "\n\n\n" +
+									"Installed version: " + LocalVersion + "\n" +
+									"Latest version: " + LatestVersion + "\n\n\n" +
 									"Automatic: Downloads the update and performs silent install in the background.\nNot implemented yet\n\n" +
 									"Manual: Opens direct link to the .exe in your default browser.\nPlease check that OS version and CPU architecture matches.\n\n";
 			return updateDetails;
