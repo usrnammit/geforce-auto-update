@@ -15,9 +15,12 @@ namespace GeforceAutoUpdate
 {
 	public partial class DriverUpdatePrompt : Form
 	{
+		GameReadyDriver.Update update;
+
 		public DriverUpdatePrompt()
 		{
 			InitializeComponent();
+			update = null;
 		}
 
 		private void DriverUpdatePromt_Load(object sender, EventArgs e)
@@ -33,19 +36,13 @@ namespace GeforceAutoUpdate
 			UpdateInfo.Height = 296;
 			progressBar.Show();
 
-			GameReadyDriver.Update update = new GameReadyDriver.Update();
-
-			update.Download();
-			while (update.Downloading)
-			{
-				Application.DoEvents();
-			}
-
+			update = new GameReadyDriver.Update();
+			update.Download(progressBar);
+			update.Extract();
 			update.Install();
-			while (update.Installing)
-			{
-				Application.DoEvents();
-			}
+			update.CleanUp();
+
+			this.Close();
 		}
 
 		private void ManualButtonClicked(object sender, EventArgs e)
@@ -56,6 +53,10 @@ namespace GeforceAutoUpdate
 
 		private void CancelButtonClicked(object sender, EventArgs e)
 		{
+			if (update != null)
+			{
+				update.Abort();
+			}
 			this.Close();
 		}
 	}

@@ -13,10 +13,13 @@ namespace GeforceAutoUpdate
 		public static readonly bool isInstalled;
 		public static readonly bool UpdateNeeded;
 
+		private static string extractPath;
+
 		static GameReadyDriver()
 		{
 			LocalVersion = RetrieveLocalVersion();
 			LatestVersion = RetrieveLatestVersion();
+			extractPath = null;
 
 			if (LocalVersion == null)
 			{
@@ -84,11 +87,13 @@ namespace GeforceAutoUpdate
 
 				if (windowsVersion.StartsWith("Windows 10"))
 				{
+					extractPath = "C:\\NVIDIA\\DisplayDriver\\" + LatestVersion + "\\Win10_64\\International\\";
 					string downloadLink = "http://us.download.nvidia.com/Windows/" + LatestVersion + "/" + LatestVersion + "-desktop-win10-64bit-international-whql.exe";
 					return downloadLink;
 				}
 				else
 				{
+					extractPath = "C:\\NVIDIA\\DisplayDriver\\" + LatestVersion + "\\Win8_Win7_64\\International\\";
 					string downloadLink = "http://us.download.nvidia.com/Windows/" + LatestVersion + "/" + LatestVersion + "-desktop-win8-win7-64bit-international-whql.exe";
 					return downloadLink;
 				}
@@ -101,11 +106,13 @@ namespace GeforceAutoUpdate
 
 				if (windowsVersion.StartsWith("Windows 10"))
 				{
+					extractPath = "C:\\NVIDIA\\DisplayDriver\\" + LatestVersion + "\\Win10\\International\\";
 					string downloadLink = "http://us.download.nvidia.com/Windows/" + LocalVersion + "/" + LocalVersion + "-desktop-win10-32bit-international-whql.exe";
 					return downloadLink;
 				}
 				else
 				{
+					extractPath = "C:\\NVIDIA\\DisplayDriver\\" + LatestVersion + "\\Win8_Win7\\International\\";
 					string downloadLink = "http://us.download.nvidia.com/Windows/" + LocalVersion + "/" + LocalVersion + "-desktop-win8-win7-32bit-international-whql.exe";
 					return downloadLink;
 				}
