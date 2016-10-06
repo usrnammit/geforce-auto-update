@@ -14,17 +14,10 @@ namespace GeforceAutoUpdate
 
 
 			}
-			else
+			else if (GameReadyDriver.UpdateNeeded)
 			{
-				if (!GameReadyDriver.IsInstalled)
-				{
-					MessageBox.Show("Unable to retrieve local version of Game Ready Driver.");
-				}
-				else if (GameReadyDriver.UpdateNeeded)
-				{
-					DriverUpdatePrompt prompt = new DriverUpdatePrompt();
-					Application.Run(prompt);
-				}
+				DriverUpdatePrompt prompt = new DriverUpdatePrompt();
+				Application.Run(prompt);
 			}
 		}
 	}

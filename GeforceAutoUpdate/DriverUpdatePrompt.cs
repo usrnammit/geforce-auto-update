@@ -15,12 +15,9 @@ namespace GeforceAutoUpdate
 {
 	public partial class DriverUpdatePrompt : Form
 	{
-		GameReadyDriver.Update update;
-
 		public DriverUpdatePrompt()
 		{
 			InitializeComponent();
-			update = null;
 		}
 
 		private void DriverUpdatePromt_Load(object sender, EventArgs e)
@@ -31,14 +28,20 @@ namespace GeforceAutoUpdate
 		private void AutomaticButtonClicked(object sender, EventArgs e)
 		{
 			// restart as admin with -install argument
-
 			Process restart = new Process();
 			restart.StartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
 			restart.StartInfo.UseShellExecute = true;
 			restart.StartInfo.Arguments = "-install";
 			restart.StartInfo.Verb = "runas";
-			restart.Start();
-			Environment.Exit(0);
+			try
+			{
+				restart.Start();
+				this.Close();
+			}
+			catch (Win32Exception)
+			{
+				UpdateInfo.Text += "Administrator privileges are required for automatic installation!\n";
+			}
 		}
 
 		private void ManualButtonClicked(object sender, EventArgs e)
@@ -49,10 +52,6 @@ namespace GeforceAutoUpdate
 
 		private void CancelButtonClicked(object sender, EventArgs e)
 		{
-			if (update != null)
-			{
-				update.Abort();
-			}
 			this.Close();
 		}
 	}

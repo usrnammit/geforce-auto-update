@@ -76,16 +76,16 @@ namespace GeforceAutoUpdate
 				extract.WaitForExit();
 				if (extract.ExitCode == 0)
 				{
-					Directory.Delete(extractPath + "Display.Update\\", true);
-					Directory.Delete(extractPath + "GFExperience\\", true);
-					Directory.Delete(extractPath + "GFExperience.NvStreamSrv\\", true);
-					Directory.Delete(extractPath + "GfExperienceService\\", true);
-					Directory.Delete(extractPath + "HDAudio\\", true);
-					Directory.Delete(extractPath + "NV3DVision\\", true);
-					Directory.Delete(extractPath + "NV3DVisionUSB.Driver\\", true);
-					Directory.Delete(extractPath + "PhysX\\", true);
-					Directory.Delete(extractPath + "ShadowPlay\\", true);
-					Directory.Delete(extractPath + "Update.Core\\", true);
+					// Directory.Delete(extractPath + "Display.Update\\", true);
+					// Directory.Delete(extractPath + "GFExperience\\", true);
+					// Directory.Delete(extractPath + "GFExperience.NvStreamSrv\\", true);
+					// Directory.Delete(extractPath + "GfExperienceService\\", true);
+					// Directory.Delete(extractPath + "HDAudio\\", true);
+					// Directory.Delete(extractPath + "NV3DVision\\", true);
+					// Directory.Delete(extractPath + "NV3DVisionUSB.Driver\\", true);
+					// Directory.Delete(extractPath + "PhysX\\", true);
+					// Directory.Delete(extractPath + "ShadowPlay\\", true);
+					// Directory.Delete(extractPath + "Update.Core\\", true);
 
 					return true;
 				}
@@ -100,7 +100,7 @@ namespace GeforceAutoUpdate
 			public bool Install()
 			{
 				Process install = new Process();
-				install.StartInfo.FileName = extractPath + "setup.exe";
+				install.StartInfo.FileName = "setup.exe";
 				install.StartInfo.Arguments = "/n /passive /noeula /nofinish";
 				install.Start();
 				install.WaitForExit();

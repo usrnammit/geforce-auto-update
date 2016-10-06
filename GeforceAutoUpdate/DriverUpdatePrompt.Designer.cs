@@ -39,19 +39,22 @@
 			// AutomaticButton
 			// 
 			this.AutomaticButton.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
-			this.AutomaticButton.Location = new System.Drawing.Point(12, 343);
+			this.AutomaticButton.Image = ((System.Drawing.Image)(resources.GetObject("AutomaticButton.Image")));
+			this.AutomaticButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.AutomaticButton.Location = new System.Drawing.Point(12, 346);
 			this.AutomaticButton.Name = "AutomaticButton";
-			this.AutomaticButton.Size = new System.Drawing.Size(91, 38);
+			this.AutomaticButton.Size = new System.Drawing.Size(90, 38);
 			this.AutomaticButton.TabIndex = 0;
 			this.AutomaticButton.Text = "Automatic";
+			this.AutomaticButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			this.AutomaticButton.UseVisualStyleBackColor = true;
 			this.AutomaticButton.Click += new System.EventHandler(this.AutomaticButtonClicked);
 			// 
 			// ManualButton
 			// 
-			this.ManualButton.Location = new System.Drawing.Point(163, 343);
+			this.ManualButton.Location = new System.Drawing.Point(165, 346);
 			this.ManualButton.Name = "ManualButton";
-			this.ManualButton.Size = new System.Drawing.Size(91, 38);
+			this.ManualButton.Size = new System.Drawing.Size(90, 38);
 			this.ManualButton.TabIndex = 1;
 			this.ManualButton.Text = "Manual";
 			this.ManualButton.UseVisualStyleBackColor = true;
@@ -59,9 +62,9 @@
 			// 
 			// MyCancelButton
 			// 
-			this.MyCancelButton.Location = new System.Drawing.Point(316, 346);
+			this.MyCancelButton.Location = new System.Drawing.Point(317, 346);
 			this.MyCancelButton.Name = "MyCancelButton";
-			this.MyCancelButton.Size = new System.Drawing.Size(91, 38);
+			this.MyCancelButton.Size = new System.Drawing.Size(90, 38);
 			this.MyCancelButton.TabIndex = 2;
 			this.MyCancelButton.Text = "Cancel";
 			this.MyCancelButton.UseVisualStyleBackColor = true;
@@ -73,13 +76,13 @@
 			this.UpdateInfo.Location = new System.Drawing.Point(12, 12);
 			this.UpdateInfo.Name = "UpdateInfo";
 			this.UpdateInfo.ReadOnly = true;
-			this.UpdateInfo.Size = new System.Drawing.Size(395, 325);
+			this.UpdateInfo.Size = new System.Drawing.Size(395, 328);
 			this.UpdateInfo.TabIndex = 3;
 			this.UpdateInfo.Text = "";
 			// 
 			// progressBar
 			// 
-			this.progressBar.Location = new System.Drawing.Point(12, 314);
+			this.progressBar.Location = new System.Drawing.Point(12, 317);
 			this.progressBar.Name = "progressBar";
 			this.progressBar.Size = new System.Drawing.Size(395, 23);
 			this.progressBar.TabIndex = 4;
