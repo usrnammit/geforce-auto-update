@@ -30,38 +30,7 @@ namespace GeforceAutoUpdate
 
 		private void AutomaticButtonClicked(object sender, EventArgs e)
 		{
-			AutomaticButton.Enabled = false;
-			ManualButton.Enabled = false;
-
-			UpdateInfo.Height = 296;
-			progressBar.Show();
-
-			update = new GameReadyDriver.Update();
-
-			UpdateInfo.Text += "==================================\n\nDonwloading update...";
-			if (!update.Download(progressBar))
-			{
-				MessageBox.Show("Something went wrong with the download.");
-				update.Abort();
-				this.Close();
-			}
-			UpdateInfo.Text += "OK!\nExtracting files...";
-			if (!update.Extract())
-			{
-				MessageBox.Show("Something went wrong with the archive extraction.");
-				update.Abort();
-				this.Close();
-			}
-			UpdateInfo.Text += "OK!\nStarting nVidia Driver Installer.";
-			MyCancelButton.Enabled = false;
-			if (!update.Install())
-			{
-				MessageBox.Show("Something went wrong during the installation.");
-			}
-			UpdateInfo.Text += "\n\nGeForce Game Ready Driver was successfully updated.\nDeleting installation files and exiting.";
-			update.CleanUp();
-
-			this.Close();
+			
 		}
 
 		private void ManualButtonClicked(object sender, EventArgs e)
