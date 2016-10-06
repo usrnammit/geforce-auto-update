@@ -14,13 +14,27 @@ namespace GeforceAutoUpdate
 		public static readonly bool UpdateNeeded;
 		//TODO: rewrite as properties
 
-		private static string extractPath;
-
 		static GameReadyDriver()
 		{
-			LocalVersion = RetrieveLocalVersion();
-			LatestVersion = RetrieveLatestVersion();
-			extractPath = null;
+			try
+			{
+				LocalVersion = RetrieveLocalVersion();
+			}
+			catch
+			{
+				// permission to read registry
+				// registry not found
+			}
+
+			try
+			{
+				LatestVersion = RetrieveLatestVersion();
+			}
+			catch
+			{
+				// no internet
+				// regex fail
+			}
 
 			if (LocalVersion == null)
 			{
@@ -53,16 +67,8 @@ namespace GeforceAutoUpdate
 			}
 
 			localKey = localKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}_Display.Driver");
-
-			if (localKey != null)
-			{
-				string version = localKey.GetValue("DisplayVersion").ToString();
-				return version;
-			}
-			else
-			{
-				return null;
-			}
+			string version = localKey.GetValue("DisplayVersion").ToString();
+			return version;
 		}
 		
 		// nVidia doesn't provide any reasonable way of checking current driver version beside GeForce Experience so we check latest version fo Chocolatey package.
@@ -95,13 +101,11 @@ namespace GeforceAutoUpdate
 
 				if (windowsVersion.StartsWith("Windows 10"))
 				{
-					extractPath = "C:\\NVIDIA\\DisplayDriver\\" + LatestVersion + "\\Win10_64\\International\\";
 					string downloadLink = "http://us.download.nvidia.com/Windows/" + LatestVersion + "/" + LatestVersion + "-desktop-win10-64bit-international-whql.exe";
 					return downloadLink;
 				}
 				else
 				{
-					extractPath = "C:\\NVIDIA\\DisplayDriver\\" + LatestVersion + "\\Win8_Win7_64\\International\\";
 					string downloadLink = "http://us.download.nvidia.com/Windows/" + LatestVersion + "/" + LatestVersion + "-desktop-win8-win7-64bit-international-whql.exe";
 					return downloadLink;
 				}
@@ -114,13 +118,11 @@ namespace GeforceAutoUpdate
 
 				if (windowsVersion.StartsWith("Windows 10"))
 				{
-					extractPath = "C:\\NVIDIA\\DisplayDriver\\" + LatestVersion + "\\Win10\\International\\";
 					string downloadLink = "http://us.download.nvidia.com/Windows/" + LocalVersion + "/" + LocalVersion + "-desktop-win10-32bit-international-whql.exe";
 					return downloadLink;
 				}
 				else
 				{
-					extractPath = "C:\\NVIDIA\\DisplayDriver\\" + LatestVersion + "\\Win8_Win7\\International\\";
 					string downloadLink = "http://us.download.nvidia.com/Windows/" + LocalVersion + "/" + LocalVersion + "-desktop-win8-win7-32bit-international-whql.exe";
 					return downloadLink;
 				}

@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace GeforceAutoUpdate
 {
@@ -6,14 +7,24 @@ namespace GeforceAutoUpdate
 	{
 		static void Main(string[] args)
 		{
-			if (!GameReadyDriver.IsInstalled)
+			if (args.Length == 1 && args[0] == "-install")
 			{
-				MessageBox.Show("Unable to retrieve local version of Game Ready Driver.");
+				// check if admin
+				// install
+
+
 			}
-			else if (GameReadyDriver.UpdateNeeded)
+			else
 			{
-				DriverUpdatePrompt prompt = new DriverUpdatePrompt();
-				Application.Run(prompt);
+				if (!GameReadyDriver.IsInstalled)
+				{
+					MessageBox.Show("Unable to retrieve local version of Game Ready Driver.");
+				}
+				else if (GameReadyDriver.UpdateNeeded)
+				{
+					DriverUpdatePrompt prompt = new DriverUpdatePrompt();
+					Application.Run(prompt);
+				}
 			}
 		}
 	}

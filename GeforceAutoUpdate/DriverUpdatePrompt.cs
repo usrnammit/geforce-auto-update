@@ -30,7 +30,15 @@ namespace GeforceAutoUpdate
 
 		private void AutomaticButtonClicked(object sender, EventArgs e)
 		{
-			
+			// restart as admin with -install argument
+
+			Process restart = new Process();
+			restart.StartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
+			restart.StartInfo.UseShellExecute = true;
+			restart.StartInfo.Arguments = "-install";
+			restart.StartInfo.Verb = "runas";
+			restart.Start();
+			Environment.Exit(0);
 		}
 
 		private void ManualButtonClicked(object sender, EventArgs e)
