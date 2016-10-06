@@ -12,6 +12,7 @@ namespace GeforceAutoUpdate
 		public static readonly string LatestVersion;
 		public static readonly bool IsInstalled;
 		public static readonly bool UpdateNeeded;
+		//TODO: rewrite as properties
 
 		private static string extractPath;
 
@@ -25,7 +26,7 @@ namespace GeforceAutoUpdate
 			{
 				IsInstalled = false;
 				UpdateNeeded = false;
-			}
+			} // unable to parse decimal point in some regions without InvariantCulture
 			else if (Double.Parse(LatestVersion, CultureInfo.InvariantCulture) > Double.Parse(LocalVersion, CultureInfo.InvariantCulture))
 			{
 				IsInstalled = true;
@@ -38,6 +39,7 @@ namespace GeforceAutoUpdate
 			}
 		}
 
+		// returns string representation of the version following 123.45 pattern if driver is installed
 		private static string RetrieveLocalVersion()
 		{
 			RegistryKey localKey = null;
@@ -82,7 +84,7 @@ namespace GeforceAutoUpdate
 		// Drivers come in 4 versions total with download link following the same pattern.
 		// The actual driver installer does it's own checks to verify propper version.
 		// extractPath is used by GameReadyDriver.Update.Unpack() - the dafault path cannot be easily changed
-		// however it follows similar pattern do the download url
+		// however it follows similar pattern do the download url therefore they're generated together
 		public static string GetDownloadLink()
 		{
 			if (Environment.Is64BitOperatingSystem)
