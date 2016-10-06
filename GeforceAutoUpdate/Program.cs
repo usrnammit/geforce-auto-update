@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using System.Security.Principal;
 
 namespace GeforceAutoUpdate
 {
@@ -7,12 +7,10 @@ namespace GeforceAutoUpdate
 	{
 		static void Main(string[] args)
 		{
-			if (args.Length == 1 && args[0] == "-install")
+			if (args.Length == 1 && args[0] == "-install" && IsElevated())
 			{
-				// check if admin
-				// install
-
-
+				DriverUpdateInstaller installer = new DriverUpdateInstaller();
+				Application.Run(installer);
 			}
 			else if (GameReadyDriver.UpdateNeeded)
 			{
@@ -20,5 +18,14 @@ namespace GeforceAutoUpdate
 				Application.Run(prompt);
 			}
 		}
+
+		static bool IsElevated()
+		{
+			WindowsIdentity identity = WindowsIdentity.GetCurrent();
+			WindowsPrincipal principal = new WindowsPrincipal(identity);
+			bool elevated = principal.IsInRole(WindowsBuiltInRole.Administrator);
+			return elevated;
+		}
 	}
 }
+

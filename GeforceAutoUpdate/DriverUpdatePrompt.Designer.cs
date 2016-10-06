@@ -33,7 +33,6 @@
 			this.ManualButton = new System.Windows.Forms.Button();
 			this.MyCancelButton = new System.Windows.Forms.Button();
 			this.UpdateInfo = new System.Windows.Forms.RichTextBox();
-			this.progressBar = new System.Windows.Forms.ProgressBar();
 			this.SuspendLayout();
 			// 
 			// AutomaticButton
@@ -80,14 +79,6 @@
 			this.UpdateInfo.TabIndex = 3;
 			this.UpdateInfo.Text = "";
 			// 
-			// progressBar
-			// 
-			this.progressBar.Location = new System.Drawing.Point(12, 317);
-			this.progressBar.Name = "progressBar";
-			this.progressBar.Size = new System.Drawing.Size(395, 23);
-			this.progressBar.TabIndex = 4;
-			this.progressBar.Visible = false;
-			// 
 			// DriverUpdatePrompt
 			// 
 			this.AccessibleName = "DriverUpdatePrompt";
@@ -95,7 +86,6 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(419, 396);
-			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.UpdateInfo);
 			this.Controls.Add(this.MyCancelButton);
 			this.Controls.Add(this.ManualButton);
@@ -115,6 +105,5 @@
 		private System.Windows.Forms.Button ManualButton;
 		private System.Windows.Forms.Button MyCancelButton;
 		private System.Windows.Forms.RichTextBox UpdateInfo;
-		private System.Windows.Forms.ProgressBar progressBar;
 	}
 }

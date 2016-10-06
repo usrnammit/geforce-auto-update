@@ -67,6 +67,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DriverUpdateInstaller.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DriverUpdateInstaller.Designer.cs">
+      <DependentUpon>DriverUpdateInstaller.cs</DependentUpon>
+    </Compile>
     <Compile Include="DriverUpdatePrompt.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,6 +93,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DriverUpdateInstaller.resx">
+      <DependentUpon>DriverUpdateInstaller.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DriverUpdatePrompt.resx">
       <DependentUpon>DriverUpdatePrompt.cs</DependentUpon>
     </EmbeddedResource>
