@@ -43,6 +43,7 @@
 			this.MyCancelButton.TabIndex = 3;
 			this.MyCancelButton.Text = "Cancel";
 			this.MyCancelButton.UseVisualStyleBackColor = true;
+			this.MyCancelButton.Click += new System.EventHandler(this.CancelButtonClicked);
 			// 
 			// InfoBox
 			// 

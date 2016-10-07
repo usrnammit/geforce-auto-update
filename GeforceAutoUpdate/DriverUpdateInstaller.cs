@@ -22,12 +22,16 @@ namespace GeforceAutoUpdate
 
 		private async void Install()
 		{
-			GameReadyDriver.Update update = new GameReadyDriver.Update();
+			GameReadyDriver.Update update = new GameReadyDriver.Update(InfoBox);
 			await update.Download(progressBar);
-			update.Extract(silentCheckBox.Checked);
-			// update.Install();
+			await update.Extract(silentCheckBox.Checked);
+			// update.Install(silentCheckBox.Checked);
 			// update.CleanUp();
-			this.Close();
+		}
+
+		private void CancelButtonClicked(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
