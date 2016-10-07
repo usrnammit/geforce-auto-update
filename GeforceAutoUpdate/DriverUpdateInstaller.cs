@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,13 +20,13 @@ namespace GeforceAutoUpdate
 			Install();
 		}
 
-		public void Install()
+		private async void Install()
 		{
 			GameReadyDriver.Update update = new GameReadyDriver.Update();
-			update.Download(progressBar);
-			update.Extract();
-			update.Install();
-			update.CleanUp();
+			await update.Download(progressBar);
+			update.Extract(silentCheckBox.Checked);
+			// update.Install();
+			// update.CleanUp();
 			this.Close();
 		}
 	}

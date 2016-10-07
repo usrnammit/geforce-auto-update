@@ -5,6 +5,7 @@ using System.Net;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace GeforceAutoUpdate
 {
@@ -15,63 +16,53 @@ namespace GeforceAutoUpdate
 			private WebClient client;
 			private ProgressBar progressBar;
 			private Process extract;
-			private string location;
-			private bool downloading;
-			private bool downloadOK;
+
+			private string downloadPath;
+			private string extractPath;
+
 
 
 			public Update()
 			{
+				client = null;
+				downloadPath = Path.GetTempPath() + "GeForceAutoUpdate\\";
+				Directory.CreateDirectory(downloadPath);
+			}
+
+			public async Task Download()
+			{
 				client = new WebClient();
-				location = Path.GetTempPath() + "GeForceAutoUpdate\\";
-				Directory.CreateDirectory(location);
-				downloading = false;
-				downloadOK = false;
+				await client.DownloadFileTaskAsync(new Uri(GetDownloadLink()), downloadPath + "update.exe");
+
 			}
 
-			public void Download()
+			public async Task Download(ProgressBar progressBar)
 			{
-				downloading = true;
-				client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-				client.DownloadFileAsync(new Uri(GetDownloadLink()), location + "update.exe");
-
-				while (downloading)
-				{
-					Thread.Sleep(1000);
-				}
-			}
-
-			public bool Download(ProgressBar progressBar)
-			{
-				downloading = true;
+				client = new WebClient();
 				this.progressBar = progressBar;
 				client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
-				client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-				client.DownloadFileAsync(new Uri(GetDownloadLink()), location + "update.exe");
+				await client.DownloadFileTaskAsync(new Uri(GetDownloadLink()), downloadPath + "update.exe");
+			}
 
-				while (downloading)
-				{
-					Application.DoEvents();
-				}
+			public void Extract(bool silent)
+			{
+				extract = new Process();
+				extract.StartInfo.FileName = downloadPath + "update.exe";
+				extract.StartInfo.Arguments = "-sfxconfig " + downloadPath + "config.txt";
+				extract.Start();
+				extract.WaitForExit();
 
-				if (downloadOK)
+				string[] config = File.ReadAllLines(downloadPath + "config.txt");
+				extractPath = config[1].Substring(27).Replace(@"\\", @"\");
+
+				if (silent)
 				{
-					return true;
+					extract.StartInfo.Arguments = "-gm2 -nr -y";
 				}
 				else
 				{
-					return false;
+					extract.StartInfo.Arguments = "-nr -y";
 				}
-			}
-
-			// -nr prevents setup.exe from running immediately after extraction
-			// -y automates the process, adding -gm will result in fully silent extraction
-			// deletes any products besides actual video driver and core functionality
-			public bool Extract()
-			{
-				extract = new Process();
-				extract.StartInfo.FileName = location + "update.exe";
-				extract.StartInfo.Arguments = "-nr -y";
 				extract.Start();
 				extract.WaitForExit();
 				if (extract.ExitCode == 0)
@@ -86,12 +77,6 @@ namespace GeforceAutoUpdate
 					// Directory.Delete(extractPath + "PhysX\\", true);
 					// Directory.Delete(extractPath + "ShadowPlay\\", true);
 					// Directory.Delete(extractPath + "Update.Core\\", true);
-
-					return true;
-				}
-				else
-				{
-					return false;
 				}
 			}
 
@@ -114,47 +99,11 @@ namespace GeforceAutoUpdate
 				}
 			}
 
-			public void Abort()
-			{
-				if (client != null)
-				{
-					client.CancelAsync();
-					client.Dispose();
-				}
-				if (extract != null)
-				{
-					extract.Kill();
-					extract.Dispose();
-				}
-				Thread.Sleep(3000);
-				CleanUp();
-			}
-
-			public void CleanUp()
-			{
-				if (Directory.Exists(location))
-				{
-					Directory.Delete(location, true);
-				}
-				if (Directory.Exists("C:\\NVIDIAL"))
-				{
-					Directory.Delete("C:\\NVIDIA", true);
-				}
-			}
 
 			private void client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
 			{
 				progressBar.Maximum = (int)e.TotalBytesToReceive / 100;
 				progressBar.Value = (int)e.BytesReceived / 100;
-			}
-
-			private void client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
-			{
-				if (e.Error == null)
-				{
-					downloadOK = true;
-				}
-				downloading = false;
 			}
 		}
 	}

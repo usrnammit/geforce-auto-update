@@ -32,7 +32,7 @@
 			this.MyCancelButton = new System.Windows.Forms.Button();
 			this.InfoBox = new System.Windows.Forms.RichTextBox();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
-			this.silentChecked = new System.Windows.Forms.CheckBox();
+			this.silentCheckBox = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// MyCancelButton
@@ -61,28 +61,30 @@
 			this.progressBar.Size = new System.Drawing.Size(395, 30);
 			this.progressBar.TabIndex = 5;
 			// 
-			// silentChecked
+			// silentCheckBox
 			// 
-			this.silentChecked.AutoSize = true;
-			this.silentChecked.Location = new System.Drawing.Point(19, 358);
-			this.silentChecked.Name = "silentChecked";
-			this.silentChecked.Size = new System.Drawing.Size(166, 17);
-			this.silentChecked.TabIndex = 6;
-			this.silentChecked.Text = "Don\'t show progress windows";
-			this.silentChecked.UseVisualStyleBackColor = true;
+			this.silentCheckBox.AutoSize = true;
+			this.silentCheckBox.Location = new System.Drawing.Point(23, 358);
+			this.silentCheckBox.Name = "silentCheckBox";
+			this.silentCheckBox.Size = new System.Drawing.Size(205, 17);
+			this.silentCheckBox.TabIndex = 6;
+			this.silentCheckBox.Text = "Don\'t show NVIDIA progress windows";
+			this.silentCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// DriverUpdateInstaller
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(419, 396);
-			this.Controls.Add(this.silentChecked);
+			this.Controls.Add(this.silentCheckBox);
 			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.InfoBox);
 			this.Controls.Add(this.MyCancelButton);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "DriverUpdateInstaller";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Driver Update Installer";
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -94,6 +96,6 @@
 		private System.Windows.Forms.Button MyCancelButton;
 		private System.Windows.Forms.RichTextBox InfoBox;
 		private System.Windows.Forms.ProgressBar progressBar;
-		private System.Windows.Forms.CheckBox silentChecked;
+		private System.Windows.Forms.CheckBox silentCheckBox;
 	}
 }

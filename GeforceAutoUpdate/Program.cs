@@ -19,6 +19,7 @@ namespace GeforceAutoUpdate
 			}
 		}
 
+		// true if running as admin
 		static bool IsElevated()
 		{
 			WindowsIdentity identity = WindowsIdentity.GetCurrent();
