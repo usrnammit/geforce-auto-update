@@ -33,25 +33,27 @@
 			this.ManualButton = new System.Windows.Forms.Button();
 			this.MyCancelButton = new System.Windows.Forms.Button();
 			this.UpdateInfo = new System.Windows.Forms.RichTextBox();
-			this.progressBar = new System.Windows.Forms.ProgressBar();
 			this.SuspendLayout();
 			// 
 			// AutomaticButton
 			// 
 			this.AutomaticButton.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
-			this.AutomaticButton.Location = new System.Drawing.Point(12, 343);
+			this.AutomaticButton.Image = ((System.Drawing.Image)(resources.GetObject("AutomaticButton.Image")));
+			this.AutomaticButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.AutomaticButton.Location = new System.Drawing.Point(12, 346);
 			this.AutomaticButton.Name = "AutomaticButton";
-			this.AutomaticButton.Size = new System.Drawing.Size(91, 38);
+			this.AutomaticButton.Size = new System.Drawing.Size(90, 38);
 			this.AutomaticButton.TabIndex = 0;
 			this.AutomaticButton.Text = "Automatic";
+			this.AutomaticButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			this.AutomaticButton.UseVisualStyleBackColor = true;
 			this.AutomaticButton.Click += new System.EventHandler(this.AutomaticButtonClicked);
 			// 
 			// ManualButton
 			// 
-			this.ManualButton.Location = new System.Drawing.Point(163, 343);
+			this.ManualButton.Location = new System.Drawing.Point(165, 346);
 			this.ManualButton.Name = "ManualButton";
-			this.ManualButton.Size = new System.Drawing.Size(91, 38);
+			this.ManualButton.Size = new System.Drawing.Size(90, 38);
 			this.ManualButton.TabIndex = 1;
 			this.ManualButton.Text = "Manual";
 			this.ManualButton.UseVisualStyleBackColor = true;
@@ -59,9 +61,9 @@
 			// 
 			// MyCancelButton
 			// 
-			this.MyCancelButton.Location = new System.Drawing.Point(316, 346);
+			this.MyCancelButton.Location = new System.Drawing.Point(317, 346);
 			this.MyCancelButton.Name = "MyCancelButton";
-			this.MyCancelButton.Size = new System.Drawing.Size(91, 38);
+			this.MyCancelButton.Size = new System.Drawing.Size(90, 38);
 			this.MyCancelButton.TabIndex = 2;
 			this.MyCancelButton.Text = "Cancel";
 			this.MyCancelButton.UseVisualStyleBackColor = true;
@@ -73,17 +75,9 @@
 			this.UpdateInfo.Location = new System.Drawing.Point(12, 12);
 			this.UpdateInfo.Name = "UpdateInfo";
 			this.UpdateInfo.ReadOnly = true;
-			this.UpdateInfo.Size = new System.Drawing.Size(395, 325);
+			this.UpdateInfo.Size = new System.Drawing.Size(395, 328);
 			this.UpdateInfo.TabIndex = 3;
 			this.UpdateInfo.Text = "";
-			// 
-			// progressBar
-			// 
-			this.progressBar.Location = new System.Drawing.Point(12, 314);
-			this.progressBar.Name = "progressBar";
-			this.progressBar.Size = new System.Drawing.Size(395, 23);
-			this.progressBar.TabIndex = 4;
-			this.progressBar.Visible = false;
 			// 
 			// DriverUpdatePrompt
 			// 
@@ -92,7 +86,6 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(419, 396);
-			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.UpdateInfo);
 			this.Controls.Add(this.MyCancelButton);
 			this.Controls.Add(this.ManualButton);
@@ -100,6 +93,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "DriverUpdatePrompt";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "GeForce Auto Updater";
 			this.Load += new System.EventHandler(this.DriverUpdatePromt_Load);
 			this.ResumeLayout(false);
@@ -112,6 +106,5 @@
 		private System.Windows.Forms.Button ManualButton;
 		private System.Windows.Forms.Button MyCancelButton;
 		private System.Windows.Forms.RichTextBox UpdateInfo;
-		private System.Windows.Forms.ProgressBar progressBar;
 	}
 }

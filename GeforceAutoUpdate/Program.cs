@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System.Security.Principal;
 
 namespace GeforceAutoUpdate
 {
@@ -6,9 +7,10 @@ namespace GeforceAutoUpdate
 	{
 		static void Main(string[] args)
 		{
-			if (!GameReadyDriver.IsInstalled)
+			if (args.Length == 1 && args[0] == "-install" && IsElevated())
 			{
-				MessageBox.Show("Unable to retrieve local version of Game Ready Driver.");
+				DriverUpdateInstaller installer = new DriverUpdateInstaller();
+				Application.Run(installer);
 			}
 			else if (GameReadyDriver.UpdateNeeded)
 			{
@@ -16,5 +18,15 @@ namespace GeforceAutoUpdate
 				Application.Run(prompt);
 			}
 		}
+
+		// true if running as admin
+		static bool IsElevated()
+		{
+			WindowsIdentity identity = WindowsIdentity.GetCurrent();
+			WindowsPrincipal principal = new WindowsPrincipal(identity);
+			bool elevated = principal.IsInRole(WindowsBuiltInRole.Administrator);
+			return elevated;
+		}
 	}
 }
+

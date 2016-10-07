@@ -5,6 +5,7 @@ using System.Net;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace GeforceAutoUpdate
 {
@@ -12,133 +13,218 @@ namespace GeforceAutoUpdate
 	{
 		public class Update
 		{
-			private WebClient client;
+			private RichTextBox InfoBox;
 			private ProgressBar progressBar;
+			private WebClient client;
 			private Process extract;
-			private string location;
-			private bool downloading;
-			private bool downloadOK;
 
+			private string downloadPath;
+			private string extractPath;
 
-			public Update()
+			private bool pastInstallation;
+
+			public bool DownloadOK;
+			public bool ExtractOK;
+			public bool InstallOK;
+
+			public Update(RichTextBox InfoBox)
 			{
-				client = new WebClient();
-				location = Path.GetTempPath() + "GeForceAutoUpdate\\";
-				Directory.CreateDirectory(location);
-				downloading = false;
-				downloadOK = false;
-			}
+				downloadPath = Path.GetTempPath() + "GeForceAutoUpdate\\";
+				Directory.CreateDirectory(downloadPath);
 
-			public void Download()
-			{
-				downloading = true;
-				client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-				client.DownloadFileAsync(new Uri(GetDownloadLink()), location + "update.exe");
-
-				while (downloading)
+				if (Directory.Exists(Path.GetPathRoot(Environment.SystemDirectory) + "NVIDIA\\"))
 				{
-					Thread.Sleep(1000);
-				}
-			}
-
-			public bool Download(ProgressBar progressBar)
-			{
-				downloading = true;
-				this.progressBar = progressBar;
-				client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
-				client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-				client.DownloadFileAsync(new Uri(GetDownloadLink()), location + "update.exe");
-
-				while (downloading)
-				{
-					Application.DoEvents();
-				}
-
-				if (downloadOK)
-				{
-					return true;
+					pastInstallation = false;
 				}
 				else
 				{
-					return false;
+					pastInstallation = true;
 				}
+
+				this.InfoBox = InfoBox;
+				InfoBox.AppendText("Starting installation of Game Ready Driver version " + LatestVersion + "\n\n");
+				InfoBox.Text += GetDownloadLink() + "\n\n";
+
+				DownloadOK = true;
+				ExtractOK = true;
+				InstallOK = true;
 			}
 
-			// -nr prevents setup.exe from running immediately after extraction
-			// -y automates the process, adding -gm will result in fully silent extraction
-			// deletes any products besides actual video driver and core functionality
-			public bool Extract()
+			public async Task Download()
 			{
+				InfoBox.AppendText("Downloading...");
+				client = new WebClient();
+				await client.DownloadFileTaskAsync(new Uri(GetDownloadLink()), downloadPath + "update.exe");
+			}
+
+			public async Task Download(ProgressBar progressBar)
+			{
+				InfoBox.AppendText("Downloading...");
+				client = new WebClient();
+				this.progressBar = progressBar;
+				client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
+				client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
+				await client.DownloadFileTaskAsync(new Uri(GetDownloadLink()), downloadPath + "update.exe");
+			}
+
+			public async Task Extract(bool silent)
+			{
+				InfoBox.AppendText("Getting unpack location...");
 				extract = new Process();
-				extract.StartInfo.FileName = location + "update.exe";
-				extract.StartInfo.Arguments = "-nr -y";
+				extract.StartInfo.FileName = downloadPath + "update.exe";
+				extract.StartInfo.Arguments = "-sfxconfig " + downloadPath + "config.txt";
 				extract.Start();
 				extract.WaitForExit();
 				if (extract.ExitCode == 0)
 				{
-					Directory.Delete(extractPath + "Display.Update\\", true);
-					Directory.Delete(extractPath + "GFExperience\\", true);
-					Directory.Delete(extractPath + "GFExperience.NvStreamSrv\\", true);
-					Directory.Delete(extractPath + "GfExperienceService\\", true);
-					Directory.Delete(extractPath + "HDAudio\\", true);
-					Directory.Delete(extractPath + "NV3DVision\\", true);
-					Directory.Delete(extractPath + "NV3DVisionUSB.Driver\\", true);
-					Directory.Delete(extractPath + "PhysX\\", true);
-					Directory.Delete(extractPath + "ShadowPlay\\", true);
-					Directory.Delete(extractPath + "Update.Core\\", true);
-
-					return true;
+					string[] config = File.ReadAllLines(downloadPath + "config.txt");
+					extractPath = Path.GetPathRoot(Environment.SystemDirectory) + config[1].Substring(28).Replace(@"\\", @"\").Replace("\"", @"\");
+					InfoBox.Text += "OK\n" + extractPath + "\n\n";
 				}
 				else
 				{
-					return false;
+					ExtractOK = false;
+					return;
 				}
+
+				if (silent)
+				{
+					extract.StartInfo.Arguments = "-gm2 -nr -y";
+				}
+				else
+				{
+					extract.StartInfo.Arguments = "-nr -y";
+				}
+
+				InfoBox.AppendText("Unpacking...");
+				extract.Start();
+				await Task.Run(() => extract.WaitForExit());
+
+				if (extract.ExitCode == 0)
+				{
+					InfoBox.Text += "OK\n\nRemoving unwanted components:\n";
+					if (Directory.Exists(extractPath + "Display.Update\\"))
+					{
+						Directory.Delete(extractPath + "Display.Update\\", true);
+						InfoBox.AppendText(" - Removing Display.Updaten\n");
+					}
+					if (Directory.Exists(extractPath + "GFExperience\\"))
+					{
+						Directory.Delete(extractPath + "GFExperience\\", true);
+						InfoBox.AppendText(" - Removing GFExperience\n");
+					}
+					if (Directory.Exists(extractPath + "GFExperience.NvStreamSrv\\"))
+					{
+						Directory.Delete(extractPath + "GFExperience.NvStreamSrv\\", true);
+						InfoBox.AppendText(" - Removing GFExperience.NvStreamSrv\n");
+					}
+					if (Directory.Exists(extractPath + "GfExperienceService\\"))
+					{
+						Directory.Delete(extractPath + "GfExperienceService\\", true);
+						InfoBox.AppendText(" - Removing GfExperienceService\n");
+					}
+					if (Directory.Exists(extractPath + "HDAudio\\"))
+					{
+						Directory.Delete(extractPath + "HDAudio\\", true);
+						InfoBox.AppendText(" - Removing HDAudio\n");
+					}
+					if (Directory.Exists(extractPath + "NV3DVision\\"))
+					{
+						Directory.Delete(extractPath + "NV3DVision\\", true);
+						InfoBox.AppendText(" - Removing NV3DVision\n");
+					}
+					if (Directory.Exists(extractPath + "NV3DVisionUSB.Driver\\"))
+					{
+						Directory.Delete(extractPath + "NV3DVisionUSB.Driver\\", true);
+						InfoBox.AppendText(" - Removing NV3DVisionUSB.Driver\n");
+					}
+					if (Directory.Exists(extractPath + "PhysX\\"))
+					{
+						Directory.Delete(extractPath + "PhysX\\", true);
+						InfoBox.AppendText(" - Removing PhysX\n");
+					}
+					if (Directory.Exists(extractPath + "ShadowPlay\\"))
+					{
+						Directory.Delete(extractPath + "ShadowPlay\\", true);
+						InfoBox.AppendText(" - Removing ShadowPlay\n");
+					}
+					if (Directory.Exists(extractPath + "Update.Core\\"))
+					{
+						Directory.Delete(extractPath + "Update.Core\\", true);
+						InfoBox.AppendText(" - Removing Update.Core\n\n");
+					}
+				}
+				else
+				{
+					ExtractOK = false;
+					InfoBox.AppendText("Error!");
+				}
+				extract.Dispose();
 			}
 
-			// /n prevents PC from rebooting
-			// replacing /passive with /s will result in fully silent install
-			public bool Install()
+			public async Task Install(bool silent)
 			{
 				Process install = new Process();
+				InfoBox.AppendText("Installing...");
 				install.StartInfo.FileName = extractPath + "setup.exe";
-				install.StartInfo.Arguments = "/n /passive /noeula /nofinish";
-				install.Start();
-				install.WaitForExit();
-				if (install.ExitCode == 0)
+				if (silent)
 				{
-					return true;
+					install.StartInfo.Arguments = "/n /s /noeula /nofinish";
 				}
 				else
 				{
-					return false;
+					install.StartInfo.Arguments = "/n /passive /noeula /nofinish";
+				}
+				install.Start();
+				await Task.Run(() => install.WaitForExit());
+
+				if (install.ExitCode != 0)
+				{
+					InstallOK = false;
+					InfoBox.AppendText("Error!\n\n");
+				}
+				else
+				{
+					InfoBox.AppendText("OK\n\n");
 				}
 			}
 
 			public void Abort()
 			{
+				InfoBox.AppendText("Aborting operation:\n");
 				if (client != null)
 				{
 					client.CancelAsync();
-					client.Dispose();
+					InfoBox.AppendText(" - Stopping download client.\n\n");
 				}
-				if (extract != null)
+				if (extract != null && !extract.HasExited)
 				{
 					extract.Kill();
-					extract.Dispose();
+					InfoBox.AppendText(" - Stopping extraction process.\n\n");
 				}
-				Thread.Sleep(3000);
+				Thread.Sleep(2000);
 				CleanUp();
 			}
 
 			public void CleanUp()
 			{
-				if (Directory.Exists(location))
+				if (Directory.Exists(downloadPath))
 				{
-					Directory.Delete(location, true);
+					Directory.Delete(downloadPath, true);
+					InfoBox.AppendText("Deleting download files.\n\n");
+
 				}
-				if (Directory.Exists("C:\\NVIDIAL"))
+				if (Directory.Exists(extractPath))
 				{
-					Directory.Delete("C:\\NVIDIA", true);
+					if (pastInstallation)
+					{
+						Directory.Delete(extractPath.Substring(0, 31), true); // deletes installation files only for installed version
+					}
+					else
+					{
+						Directory.Delete(extractPath.Substring(0, 10), true); // deletes entire NVIDIA directory in root
+					}
+					InfoBox.AppendText("Deleting unpacked instalation files.\n\n");
 				}
 			}
 
@@ -152,9 +238,13 @@ namespace GeforceAutoUpdate
 			{
 				if (e.Error == null)
 				{
-					downloadOK = true;
+					InfoBox.AppendText("OK\n\n");
 				}
-				downloading = false;
+				else
+				{
+					DownloadOK = false;
+				}
+				client.Dispose();
 			}
 		}
 	}

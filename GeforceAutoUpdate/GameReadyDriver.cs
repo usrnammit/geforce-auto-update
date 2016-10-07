@@ -3,6 +3,8 @@ using Microsoft.Win32;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Security;
 
 namespace GeforceAutoUpdate
 {
@@ -10,31 +12,44 @@ namespace GeforceAutoUpdate
 	{
 		public static readonly string LocalVersion;
 		public static readonly string LatestVersion;
-		public static readonly bool IsInstalled;
 		public static readonly bool UpdateNeeded;
 		//TODO: rewrite as properties
 
-		private static string extractPath;
-
 		static GameReadyDriver()
 		{
-			LocalVersion = RetrieveLocalVersion();
-			LatestVersion = RetrieveLatestVersion();
-			extractPath = null;
-
+			try
+			{
+				LocalVersion = RetrieveLocalVersion();
+			}
+			catch (SecurityException)
+			{
+				MessageBox.Show("Application doesn't have rights to access registry - cannot check local version.\nYou can try restarting as Administrator");
+				Environment.Exit(1);
+			}
+			
 			if (LocalVersion == null)
 			{
-				IsInstalled = false;
-				UpdateNeeded = false;
-			} // unable to parse decimal point in some regions without InvariantCulture
-			else if (Double.Parse(LatestVersion, CultureInfo.InvariantCulture) > Double.Parse(LocalVersion, CultureInfo.InvariantCulture))
+				MessageBox.Show("Unable to check local version of nVidia driver. Are you sure it is installed?");
+				Environment.Exit(1);
+			}
+
+			try
 			{
-				IsInstalled = true;
+				LatestVersion = RetrieveLatestVersion();
+			}
+			catch (Exception e) // mostly likely Chocolatey changed page layout or URL or there is now internet access
+			{
+				MessageBox.Show("Error: Unable to retrieve latest version from Chocolatey website.\n\n" + e.Message);
+				Environment.Exit(1);
+			}
+
+			// unable to parse decimal point in some regions without InvariantCulture
+			if (Double.Parse(LatestVersion, CultureInfo.InvariantCulture) > Double.Parse(LocalVersion, CultureInfo.InvariantCulture))
+			{
 				UpdateNeeded = true;
 			}
 			else
 			{
-				IsInstalled = true;
 				UpdateNeeded = false;
 			}
 		}
@@ -53,16 +68,8 @@ namespace GeforceAutoUpdate
 			}
 
 			localKey = localKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}_Display.Driver");
-
-			if (localKey != null)
-			{
-				string version = localKey.GetValue("DisplayVersion").ToString();
-				return version;
-			}
-			else
-			{
-				return null;
-			}
+			string version = localKey.GetValue("DisplayVersion").ToString();
+			return version;
 		}
 		
 		// nVidia doesn't provide any reasonable way of checking current driver version beside GeForce Experience so we check latest version fo Chocolatey package.
@@ -95,13 +102,11 @@ namespace GeforceAutoUpdate
 
 				if (windowsVersion.StartsWith("Windows 10"))
 				{
-					extractPath = "C:\\NVIDIA\\DisplayDriver\\" + LatestVersion + "\\Win10_64\\International\\";
 					string downloadLink = "http://us.download.nvidia.com/Windows/" + LatestVersion + "/" + LatestVersion + "-desktop-win10-64bit-international-whql.exe";
 					return downloadLink;
 				}
 				else
 				{
-					extractPath = "C:\\NVIDIA\\DisplayDriver\\" + LatestVersion + "\\Win8_Win7_64\\International\\";
 					string downloadLink = "http://us.download.nvidia.com/Windows/" + LatestVersion + "/" + LatestVersion + "-desktop-win8-win7-64bit-international-whql.exe";
 					return downloadLink;
 				}
@@ -114,13 +119,11 @@ namespace GeforceAutoUpdate
 
 				if (windowsVersion.StartsWith("Windows 10"))
 				{
-					extractPath = "C:\\NVIDIA\\DisplayDriver\\" + LatestVersion + "\\Win10\\International\\";
 					string downloadLink = "http://us.download.nvidia.com/Windows/" + LocalVersion + "/" + LocalVersion + "-desktop-win10-32bit-international-whql.exe";
 					return downloadLink;
 				}
 				else
 				{
-					extractPath = "C:\\NVIDIA\\DisplayDriver\\" + LatestVersion + "\\Win8_Win7\\International\\";
 					string downloadLink = "http://us.download.nvidia.com/Windows/" + LocalVersion + "/" + LocalVersion + "-desktop-win8-win7-32bit-international-whql.exe";
 					return downloadLink;
 				}
@@ -135,7 +138,7 @@ namespace GeforceAutoUpdate
 									"Installed version: " + LocalVersion + "\n" +
 									"Latest version: " + LatestVersion + "\n\n\n" +
 									"Automatic: Downloads the update and performs silent install in the background.\nNot implemented yet\n\n" +
-									"Manual: Opens direct link to the .exe in your default browser.\nPlease check that OS version and CPU architecture matches.\n\n";
+									"Manual: Opens direct link to the .exe in your default browser.\nPlease check that OS version and CPU architecture matches.\n\n\n";
 			return updateDetails;
 		}
 	}
