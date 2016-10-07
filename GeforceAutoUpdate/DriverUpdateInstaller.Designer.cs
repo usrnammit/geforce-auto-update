@@ -87,6 +87,7 @@
 			this.Name = "DriverUpdateInstaller";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Driver Update Installer";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DriverUpdateInstaller_FormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
